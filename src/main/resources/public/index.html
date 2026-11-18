@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IronStore | Loja de suplementos</title>
+<link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header class="topbar"><div class="container topbar-inner">
+ <div class="brand"><div class="brand-icon" aria-hidden="true">IS</div>
+ <div class="brand-title">IRON<span class="accent">STORE</span></div></div>
+ <nav class="nav-tabs" aria-label="Navegação">
+ <a class="nav-btn active" id="tab-loja" href="/" data-aba="loja" aria-current="page">Loja</a>
+ <a class="nav-btn" id="atalho-carrinho" href="/carrinho" data-aba="carrinho">Carrinho <span class="nav-contador" id="badge-carrinho">0</span></a>
+ <a class="nav-btn" href="/clube-vip" data-aba="vip" aria-label="Clube VIP">VIP</a>
+ <a class="nav-btn" id="tab-estoque" href="/estoque" data-aba="estoque">Estoque</a>
+ <a class="nav-btn" id="tab-recibos" href="/recibos" data-aba="recibos">Recibos <span class="nav-contador" id="badge-recibos">0</span></a>
+ </nav>
+</div></header>
+<main class="container main-content">
+ <p id="mensagem" class="aviso" role="status" aria-live="polite" hidden></p>
+ <section id="sec-loja" aria-labelledby="titulo-catalogo">
+  <h1 id="titulo-catalogo" class="titulo-pagina" tabindex="-1">Catálogo de suplementos</h1>
+  <div class="filtros-catalogo">
+   <label class="filtro-campo"><span class="form-label">Buscar produto</span>
+    <input type="search" id="busca-produto" class="form-control" placeholder="Ex.: creatina" autocomplete="off">
+   </label>
+   <label class="filtro-campo"><span class="form-label">Categoria</span>
+    <select id="filtro-categoria" class="form-control"><option value="">Todas as categorias</option></select>
+   </label>
+  </div>
+  <div class="catalogo-resultados">
+   <p id="resultado-catalogo" class="resultado-catalogo text-muted" role="status"></p>
+   <button id="limpar-filtros" type="button" class="btn btn-ghost hidden">Limpar filtros</button>
+  </div>
+  <div id="grid-produtos" class="produtos-grid"><p>Carregando catálogo…</p></div>
+ </section>
+ <section id="sec-carrinho" class="hidden" aria-labelledby="titulo-carrinho">
+  <h1 class="titulo-pagina" id="titulo-carrinho" tabindex="-1">Seu carrinho</h1>
+  <div class="compras-grid">
+   <div class="card" id="carrinho">
+    <div class="card-header"><h2 class="section-title">Itens do carrinho</h2><span class="pill" id="qtd-itens">0 itens</span></div>
+    <div id="lista-carrinho" class="carrinho-lista"></div>
+    <a class="btn btn-ghost voltar-loja" href="/" data-aba="loja">Continuar comprando</a>
+   </div>
+   <aside class="card resumo-pedido">
+    <h2 class="section-title">Resumo do pedido</h2>
+    <div class="resumo-box">
+     <div class="resumo-linha"><span>Subtotal</span><span id="subtotal">R$ 0,00</span></div>
+     <div class="resumo-linha"><span>Desconto do cliente</span><span id="desconto">R$ 0,00</span></div>
+     <div class="resumo-total"><span>Total</span><strong id="total" class="text-amber">R$ 0,00</strong></div>
+    </div>
+    <button id="ir-checkout" type="button" class="btn btn-amber botao-largo" disabled>Finalizar compra</button>
+   </aside>
+  </div>
+ </section>
+ <section id="sec-checkout" class="hidden" aria-labelledby="titulo-checkout">
+  <h1 id="titulo-checkout" class="titulo-pagina" tabindex="-1">Finalizar compra</h1>
+  <div class="compras-grid">
+   <form id="form-compra" class="card">
+    <ol id="etapas-checkout" class="etapas-checkout" aria-label="Etapas da compra">
+     <li aria-current="step"><span>1</span> Cliente</li>
+     <li><span>2</span> Entrega</li>
+     <li><span>3</span> Pagamento</li>
+    </ol>
+    <fieldset class="checkout-section" data-etapa="0">
+     <legend tabindex="-1">Dados do cliente</legend>
+     <div class="form-group"><label for="nome" class="form-label">Nome completo</label><input id="nome" class="form-control" autocomplete="name" maxlength="100" required></div>
+     <div class="grid-2">
+      <div class="form-group"><label for="identificacao" class="form-label">Identificação do cliente</label><input id="identificacao" class="form-control" maxlength="30" placeholder="Ex.: CLIENTE-01" required></div>
+      <div class="form-group"><label for="email" class="form-label">E-mail</label><input id="email" type="email" class="form-control" autocomplete="email" maxlength="120" required></div>
+     </div>
+     <p id="status-vip-checkout" class="regra-desconto" role="status">Para usar o Clube VIP, informe a identificação e o e-mail do cadastro.</p>
+     <button id="usar-cadastro-vip" class="btn btn-ghost hidden" type="button">Usar dados do Clube VIP</button>
+    </fieldset>
+    <fieldset class="checkout-section hidden" data-etapa="1" disabled>
+     <legend tabindex="-1">Endereço de entrega</legend>
+     <div class="grid-2">
+      <div class="form-group"><label for="cep" class="form-label">CEP</label><input id="cep" class="form-control" inputmode="numeric" autocomplete="shipping postal-code" maxlength="9" pattern="[0-9]{5}-?[0-9]{3}" placeholder="00000-000" title="Informe um CEP com oito dígitos" required></div>
+      <div class="form-group"><label for="numeroEndereco" class="form-label">Número</label><input id="numeroEndereco" class="form-control" maxlength="20" required></div>
+     </div>
+     <div class="form-group"><label for="logradouro" class="form-label">Rua ou avenida</label><input id="logradouro" class="form-control" autocomplete="shipping address-line1" maxlength="100" required></div>
+     <div class="grid-2">
+      <div class="form-group"><label for="bairro" class="form-label">Bairro</label><input id="bairro" class="form-control" autocomplete="shipping address-level3" maxlength="60" required></div>
+      <div class="form-group"><label for="complemento" class="form-label">Complemento (opcional)</label><input id="complemento" class="form-control" autocomplete="shipping address-line2" maxlength="100"></div>
+     </div>
+     <div class="grid-2">
+      <div class="form-group"><label for="cidade" class="form-label">Cidade</label><input id="cidade" class="form-control" autocomplete="shipping address-level2" maxlength="60" required></div>
+      <div class="form-group">
+       <label for="uf" class="form-label">Estado</label>
+       <select id="uf" class="form-control" autocomplete="shipping address-level1" required>
+        <option value="">Selecione</option>
+        <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option>
+        <option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option>
+        <option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option>
+        <option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+        <option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option>
+        <option>SE</option><option>TO</option>
+       </select>
+      </div>
+     </div>
+    </fieldset>
+    <fieldset class="checkout-section hidden" data-etapa="2" disabled>
+     <legend tabindex="-1">Pagamento</legend>
+     <div class="form-group"><label for="pagamento" class="form-label">Forma de pagamento</label><select id="pagamento" class="form-control"><option value="pix">Pix</option><option value="credito">Cartão de crédito</option><option value="debito">Cartão de débito</option></select></div>
+     <div id="box-cartao" class="form-group hidden">
+      <label for="cartaoSelecionado" class="form-label">Cartão cadastrado</label>
+      <select id="cartaoSelecionado" class="form-control" disabled><option value="">Nenhum cartão cadastrado</option></select>
+      <button id="abrir-cartao" type="button" class="btn btn-ghost cadastrar-cartao">Cadastrar cartão</button>
+     </div>
+     <div id="box-parcelas" class="form-group hidden">
+      <label for="parcelas" class="form-label">Parcelamento sem juros</label><select id="parcelas" class="form-control"></select>
+     </div>
+     <p id="ajuda-pagamento" class="regra-desconto">Gere o QR Code para pagar com Pix.</p>
+    </fieldset>
+    <p id="mensagem-compra" class="aviso" role="status" hidden></p>
+    <div class="acoes-checkout">
+     <button id="voltar-etapa" type="button" class="btn btn-ghost">Voltar ao carrinho</button>
+     <button id="finalizar" type="submit" class="btn btn-emerald" disabled>Continuar</button>
+    </div>
+   </form>
+   <aside class="card resumo-pedido">
+    <h2 class="section-title">Resumo do pedido</h2>
+    <ul id="itens-checkout" class="itens-checkout"></ul>
+    <div class="resumo-box">
+     <div class="resumo-linha"><span>Subtotal</span><span id="checkout-subtotal">R$ 0,00</span></div>
+     <div class="resumo-linha"><span>Desconto do cliente</span><span id="checkout-desconto">R$ 0,00</span></div>
+     <div class="resumo-total"><span>Total</span><strong id="checkout-total" class="text-amber">R$ 0,00</strong></div>
+    </div>
+    <p class="regra-desconto">Clientes padrão recebem 5% a partir de R$ 500. Assinantes ativos recebem 10% até R$ 700 e 15% acima desse valor.</p>
+   </aside>
+  </div>
+ </section>
+ <section id="sec-vip" class="hidden" aria-labelledby="titulo-vip">
+  <h1 id="titulo-vip" class="titulo-pagina" tabindex="-1">Clube VIP</h1>
+  <div class="compras-grid">
+   <aside class="card resumo-pedido plano-vip">
+    <h2 class="section-title">Plano mensal</h2>
+    <p class="vip-preco"><strong id="mensalidade-vip" class="preco text-amber">—</strong><span class="text-muted"> por mês</span></p>
+    <ul class="vip-beneficios">
+     <li>10% de desconto em compras até R$ 700</li>
+     <li>15% de desconto em compras acima de R$ 700</li>
+    </ul>
+    <p class="regra-desconto">Cada mensalidade confirmada por Pix dá direito a um mês de Clube VIP.</p>
+   </aside>
+   <div class="card cadastro-vip">
+    <form id="form-vip">
+     <div class="card-header"><h2 class="section-title">Cadastro no clube</h2></div>
+     <div class="form-group"><label for="vip-nome" class="form-label">Nome completo</label><input id="vip-nome" class="form-control" autocomplete="name" maxlength="100" required></div>
+     <div class="grid-2">
+      <div class="form-group"><label for="vip-identificacao" class="form-label">Identificação do cliente</label><input id="vip-identificacao" class="form-control" maxlength="30" placeholder="Ex.: CLIENTE-01" required></div>
+      <div class="form-group"><label for="vip-email" class="form-label">E-mail</label><input id="vip-email" type="email" class="form-control" autocomplete="email" maxlength="120" required></div>
+     </div>
+     <p class="regra-desconto">Os dados do cadastro ativo são preenchidos na próxima compra nesta aba.</p>
+     <p id="mensagem-vip" class="aviso" role="status" hidden></p>
+     <button type="submit" class="btn btn-amber botao-largo">Cadastrar ou consultar</button>
+    </form>
+    <div id="assinatura-vip" class="assinatura-vip" hidden>
+     <strong id="situacao-vip" role="status"></strong>
+     <p id="validade-vip" class="text-muted"></p>
+     <button id="gerar-pix-vip" type="button" class="btn btn-emerald botao-largo">Pagar mensalidade por Pix</button>
+    </div>
+   </div>
+  </div>
+ </section>
+ <section id="sec-estoque" class="hidden"><div class="section-header"><h1 class="titulo-pagina" tabindex="-1">Controle de estoque</h1></div>
+ <div class="card tabela-wrapper"><table><thead><tr><th>Código</th><th>Produto</th><th>Preço</th><th>Estoque</th><th>Reposição</th></tr></thead><tbody id="tabela-estoque"></tbody></table></div></section>
+ <section id="sec-recibos" class="hidden"><div class="section-header"><h1 class="titulo-pagina" tabindex="-1">Recibos de venda</h1></div><div id="lista-recibos"></div></section>
+</main>
+<footer class="container rodape">IronStore</footer>
+<dialog id="dialogo-produto" class="card checkout-dialog dialogo-produto" aria-labelledby="detalhe-nome">
+ <div class="card-header"><h2 id="detalhe-nome" class="section-title"></h2>
+  <button id="fechar-produto" type="button" class="btn btn-ghost" autofocus>Fechar</button>
+ </div>
+ <div class="detalhe-grid">
+  <div class="produto-media">
+   <img id="detalhe-imagem" width="720" height="720" alt="">
+   <span id="detalhe-sem-imagem" class="hidden">Imagem indisponível</span>
+  </div>
+  <div class="detalhe-info">
+   <p id="detalhe-categoria" class="detalhe-categoria"></p>
+   <p id="detalhe-descricao" class="text-muted"></p>
+   <dl class="ficha-produto">
+    <div id="ficha-embalagem"><dt>Embalagem</dt><dd id="detalhe-embalagem"></dd></div>
+    <div id="ficha-sabores"><dt>Sabores disponíveis</dt><dd id="detalhe-sabores"></dd></div>
+   </dl>
+   <p id="mensagem-produto" class="aviso" role="status" hidden></p>
+   <div class="detalhe-acoes">
+    <strong id="detalhe-preco" class="preco"></strong>
+    <button id="adicionar-detalhe" type="button" class="btn btn-amber botao-largo" data-acao="adicionar">Adicionar ao carrinho</button>
+   </div>
+  </div>
+ </div>
+</dialog>
+<dialog id="dialogo-cartao" class="card checkout-dialog" aria-labelledby="titulo-cartao">
+ <form id="form-cartao" autocomplete="off">
+  <div class="card-header"><h2 id="titulo-cartao" class="section-title">Cadastrar cartão</h2></div>
+  <p id="mensagem-cartao" class="aviso" role="status" hidden></p>
+  <div class="form-group"><label for="titularCartao" class="form-label">Nome impresso no cartão</label><input id="titularCartao" class="form-control" maxlength="100" required></div>
+  <div class="form-group"><label for="numeroCartao" class="form-label">Número do cartão</label><input id="numeroCartao" class="form-control" inputmode="numeric" maxlength="23" placeholder="4111 1111 1111 1111" required></div>
+  <div class="form-group"><label for="validadeCartao" class="form-label">Validade</label><input id="validadeCartao" type="month" class="form-control" required></div>
+  <p class="regra-desconto">Do número do cartão, apenas os quatro últimos dígitos são guardados.</p>
+  <div class="dialog-acoes">
+   <button id="cancelar-cartao" type="button" class="btn btn-ghost">Voltar</button>
+   <button type="submit" class="btn btn-amber">Salvar cartão</button>
+  </div>
+ </form>
+</dialog>
+<dialog id="dialogo-pix" class="card checkout-dialog" aria-labelledby="titulo-pix">
+ <div class="card-header"><h2 id="titulo-pix" class="section-title" tabindex="-1" autofocus>Pagar com Pix</h2><strong id="valor-pix" class="text-amber"></strong></div>
+ <p id="mensagem-pix" class="aviso" role="status" hidden></p>
+ <p class="pix-ajuda regra-desconto">Use o QR Code ou o Pix Copia e Cola.</p>
+ <img id="qr-pix" class="pix-imagem" width="216" height="216" alt="QR Code para pagamento Pix">
+ <div class="form-group">
+  <label for="codigo-pix" class="form-label">Pix Copia e Cola</label>
+  <textarea id="codigo-pix" class="form-control pix-codigo" rows="3" readonly></textarea>
+ </div>
+ <div class="dialog-acoes">
+  <button id="cancelar-pix" type="button" class="btn btn-ghost">Voltar</button>
+  <button id="copiar-pix" type="button" class="btn btn-ghost">Copiar código</button>
+ </div>
+ <button id="confirmar-pix" type="button" class="btn btn-emerald">Confirmar pagamento</button>
+</dialog>
+</body></html>
