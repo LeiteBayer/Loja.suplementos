@@ -103,9 +103,7 @@ No Windows: `testar.bat`. No Linux/macOS: `sh testar.sh`.
 
 Os testes são escritos em Java e usam uma pasta temporária, sem mexer nos dados de apresentação. Não dependem de JUnit. Os testes de persistência usam o driver SQLite incluído em `lib`.
 
-## 5. Como preparar a apresentação
-
-Leia `GUIA_APRESENTACAO.md`. Ele mostra onde estão os conceitos de Java e um roteiro de demonstração.
+## 5. Verificar a execução em outro computador
 
 Antes de apresentar, testem no notebook e no navegador que serão usados. Verifiquem especialmente tamanho de tela, abertura do Java e permissões da pasta.
 

@@ -123,12 +123,4 @@ Para compilar a partir do código-fonte, use **JDK 17 ou superior**. No Windows,
 - [Testes.java](src/test/java/br/com/sistema/vendas/Testes.java) verifica o domínio e a API HTTP. Inclui os três meios de pagamento, leitura do QR Code, ativação e expiração do VIP e valores de R$ 700,00 e R$ 700,01.
 - [TesteBanco.java](src/test/java/br/com/sistema/vendas/TesteBanco.java) verifica persistência, relacionamentos e rollback em SQLite. Os testes usam arquivos de banco temporários.
 
-## Roteiro da apresentação
-
-1. Busque uma creatina e abra a ficha do produto para mostrar o catálogo.
-2. Cadastre um cliente VIP com dados fictícios. Mostre o status pendente, confirme a mensalidade e confira o vencimento.
-3. Adicione a creatina ao carrinho. Abra o checkout na mesma aba e mostre de onde vem o preço de **R$ 80,91**. Preencha a entrega, conclua por Pix e abra o recibo.
-4. Em duas novas compras, demonstre crédito parcelado e débito à vista. Use o cartão de teste `4111 1111 1111 1111` com titular fictício e validade futura.
-5. No código, mostre `ClienteVip` para explicar herança, `MetodoPagamento` para demonstrar polimorfismo e `RepositorioBanco` para explicar a transação da venda.
-
-Para estudar com o grupo, use o roteiro com exemplos de classes e o guia de execução. [Guia da apresentação](GUIA_APRESENTACAO.md) · [Instruções de execução e consulta](LEIA_PRIMEIRO.md)
+[Instruções de execução e consulta](LEIA_PRIMEIRO.md)
